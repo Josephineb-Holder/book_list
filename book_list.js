@@ -33,7 +33,7 @@ function addBook() {
 
   //   localStorage.setItem(book.name, bookName);
   localStorage.setItem(book.name, JSON.stringify(book));
-  console.log(localStorage.getItem(book));
+  // console.log(localStorage.getItem(book));
   displayBook(book);
 
   console.log(
@@ -49,10 +49,20 @@ function addBook() {
 // Function to display the books
 
 function displayBook(book) {
+  const booksContainer = document.getElementById("booksContainer");
+  let rows = booksContainer.getElementsByClassName("row");
+  let lastRow = rows[rows.length - 1];
+
+  if (!lastRow || lastRow.children.length >= 4) {
+    lastRow = document.createElement("div");
+    lastRow.className = "row mt-1";
+    booksContainer.appendChild(lastRow);
+  }
+
   const bookColDiv = document.createElement("div");
-  bookColDiv.className = "col-12 col-md-6 col-lg-3 mb-3 ";
+  bookColDiv.className = "col-12 col-md-6 col-lg-3 mb-2 ";
   const bookDiv = document.createElement("div");
-  bookDiv.className = "card border-0 equal-div h-75 m-1 shadow-sm";
+  bookDiv.className = "card border-0 equal-div h-100 m-1 shadow-sm ";
   bookDiv.innerHTML = `
   <div class="card-body d-flex flex-column justify-content-center align-items-center">
                     <h5 class="card-title">${book.name}</h5>
@@ -64,6 +74,7 @@ function displayBook(book) {
   bookColDiv.appendChild(bookDiv);
 
   document.getElementById("booksContainer").appendChild(bookColDiv);
+  lastRow.appendChild(bookColDiv);
 }
 
 function loadBooks() {
