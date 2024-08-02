@@ -79,6 +79,8 @@ function displayBook(book) {
 
   topDiv.innerHTML = `
   <div style="height: 23rem;">
+        <i class="fas fa-arrows-alt float-end text-success bg-light rounded-5 m-2" style="font-size: 20px"></i>
+
                     </div>
                 
   `;
