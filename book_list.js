@@ -4,6 +4,7 @@ class Book {
     this.author = "";
     this.year = new Date().getFullYear();
     this.summary = "";
+    this.cover = "";
   }
   addBookName() {
     return this.name;
@@ -17,6 +18,9 @@ class Book {
   addBookSummary() {
     return this.summary;
   }
+  addBookCover() {
+    return this.cover;
+  }
 }
 
 function addBook() {
@@ -24,12 +28,14 @@ function addBook() {
   const bookAuthor = document.getElementById("author").value;
   const bookYear = document.getElementById("year").value;
   const bookSummary = document.getElementById("summary").value;
+  const bookCover = document.getElementById("cover").value;
 
   let book = new Book();
   book.name = bookName;
   book.author = bookAuthor;
   book.year = bookYear;
   book.summary = bookSummary;
+  book.cover = bookCover;
 
   //   localStorage.setItem(book.name, bookName);
   localStorage.setItem(book.name, JSON.stringify(book));
@@ -62,19 +68,44 @@ function displayBook(book) {
   const bookColDiv = document.createElement("div");
   bookColDiv.className = "col-12 col-md-6 col-lg-3 mb-2 ";
   const bookDiv = document.createElement("div");
+  const topDiv = document.createElement("div");
+  const bottomDiv = document.createElement("div");
   bookDiv.className = "card border-0 equal-div h-100 m-1 shadow-sm ";
-  bookDiv.innerHTML = `
-  <div class="card-body d-flex flex-column justify-content-center align-items-center">
+  topDiv.className = "top-div";
+  topDiv.style.backgroundImage = `url('${book.cover}')`;
+  topDiv.style.backgroundSize = "cover";
+  topDiv.style.backgroundPosition = "center";
+  topDiv.style.backgroundRepeat = "no-repeat";
+
+  topDiv.innerHTML = `
+  <div style="height: 23rem;">
+                    </div>
+                
+  `;
+  bottomDiv.innerHTML = `
+  <div class="card-body d-flex flex-column justify-content-center align-items-center ">
+  
                     <h5 class="card-title">${book.name}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">by ${book.author} (${book.year})</h6>
-                    <p class="card-text">${book.summary}</p>
+                    <p class="card-text d-none">${book.summary}</p>
+                  
                 </div>
   
   `;
   bookColDiv.appendChild(bookDiv);
+  bookDiv.appendChild(topDiv);
+  bookDiv.appendChild(bottomDiv);
 
   document.getElementById("booksContainer").appendChild(bookColDiv);
   lastRow.appendChild(bookColDiv);
+
+  bookDiv.addEventListener("mouseover", () => {
+    bottomDiv.querySelector(".card-text").classList.remove("d-none");
+  });
+
+  bookDiv.addEventListener("mouseout", () => {
+    bottomDiv.querySelector(".card-text").classList.add("d-none");
+  });
 }
 
 function loadBooks() {
@@ -84,6 +115,18 @@ function loadBooks() {
     // const book = JSON.parse(bookData);
     try {
       const book = JSON.parse(bookData);
+      if (
+        book &&
+        book.name &&
+        book.author &&
+        book.year &&
+        book.summary &&
+        book.cover
+      ) {
+        displayBook(book);
+      } else {
+        console.warn(`Invalid book data for key "${key}":`, book);
+      }
 
       // Display each book
       displayBook(book);
