@@ -79,11 +79,46 @@ function displayBook(book) {
 
   topDiv.innerHTML = `
   <div style="height: 23rem;">
-        <i class="fas fa-arrows-alt float-end text-success bg-light rounded-5 m-2" style="font-size: 20px"></i>
+        <i class="fas fa-arrows-alt float-end text-success bg-light rounded-5 m-2" style="font-size: 20px")"></i>
 
                     </div>
                 
   `;
+
+  const dropdown = document.createElement("div");
+  dropdown.style.position = "absolute";
+  dropdown.style.top = "30px";
+  dropdown.style.right = "10px";
+  dropdown.style.backgroundColor = "white";
+  dropdown.style.border = "1px solid #ccc";
+  dropdown.style.boxShadow = "0px 4px 8px rgba(0, 0, 0, 0.1)";
+  dropdown.style.display = "none";
+  dropdown.innerHTML = `
+  <ul style="list-style: none; padding: 0; margin: 0;">
+    <li class="edit" style="padding: 10px; cursor: pointer;">Edit Book</li>
+    <li class="del" style="padding: 10px; cursor: pointer;">Delete Book</li>
+  </ul>
+`;
+
+  topDiv.appendChild(dropdown);
+
+  const iconEl = topDiv.querySelector(".fa-arrows-alt");
+  iconEl.addEventListener("click", function () {
+    if (dropdown.style.display === "none") {
+      dropdown.style.display = "block";
+    } else {
+      dropdown.style.display = "none";
+    }
+  });
+
+  const deleteEl = topDiv.querySelector(".del");
+
+  deleteEl.addEventListener("click", function () {
+    alert("delete button was click");
+    localStorage.removeItem(book.name);
+    bookDiv.remove();
+  });
+
   bottomDiv.innerHTML = `
   <div class="card-body d-flex flex-column justify-content-center align-items-center ">
   
@@ -137,8 +172,6 @@ function loadBooks() {
       // Optionally, remove the invalid entry from local storage
       localStorage.removeItem(key);
     }
-
-    // displayBook(book);
   }
 }
 // Prevent the form from submitting and refreshing the page
